@@ -1,0 +1,64 @@
+Neuroticism GWAS steps:
+
+In /pl/active/IBG/UKBiobank/PHENO/Keller:
+head -n1 ukb46510.tab | tr "\t" "\n" | nl -nln | grep 20127
+
+cut -f1,10804 ukb46510.tab > /pl/active/KellerLab/katerina/DATA/gwas/neuroticism.tab
+
+In /pl/active/KellerLab/katerina/DATA/gwas:
+awk 'NR>1 {print $1,$0;}' neuroticism.tab | sed '1iFID\tIID\tneur' > neuroticism.tmp1
+join neuroticism.tmp1 <(cut -f1,2,36-50 /pl/active/KellerLab/katerina/ukb_io/regenie/in/final33.pheno) | tr " " "\t" > neuroticism_phe_cov.tab
+
+Prep files in /pl/active/KellerLab/katerina/DATA/gwas:
+neuroticism_phe_cov.tab  neuroticism.tab  neuroticism.tmp1
+
+
+GWAS scripts in /pl/active/KellerLab/katerina/SCRIPTS/gwas/regenie:
+neuroticism_gwas_step1.sh 
+neur_gwas_step2.sh
+
+In: /pl/active/KellerLab/katerina/DATA/gwas/regenie/out
+
+require(data.table)
+require(qqman)
+require(dplyr)
+
+neur <- fread("neuroticism.tmp", data.table=F)
+neur$LOG10P <- as.numeric(neur$LOG10P)
+neur$P <- 1/(10^(neur$LOG10P))
+head(sort(neur$P))
+colnames(neur)[1] <- "CHR"
+colnames(neur)[2] <- "BP"
+colnames(neur)[3] <- "SNP"
+neur$CHR <- as.numeric(neur$CHR)
+neur$BP <- as.numeric(neur$BP)
+
+neur2<-neur2[,-c(14)]
+
+neur3 <- neur2 %>% filter(CHR!="NA")
+
+neur3_Pfilt <- neur2 %>% filter(P<.1)
+
+png("neuroticism_qq.png", width = 4, height = 4, units = 'in', res = 400)
+qq(neur3_Pfilt$P)
+
+png("neuroticism_manh.png", width = 4, height = 4, units = 'in', res = 400)
+manhattan(neur3_Pfilt)
+
+png("neuroticism_beta_hist.png", width = 4, height = 4, units = 'in', res = 400)
+hist(as.numeric(neur3$BETA))
+dev.off()
+#transferred to /pl/active/KellerLab/katerina/FIGURES/gwas
+
+
+write.table(neur3, "neuroticism_for_munge.tab", row.names=F, quote=F, sep="\t")
+require(R.utils)
+source("/pl/active/KellerLab/katerina/ukb_io/gwas/sumstats/munge_fread.R")
+munge_fread(files="neuroticism_for_munge.tab", hm3 = "/pl/active/KellerLab/katerina/ukb_io/gwas/sumstats/w_hm3.noMHC.snplist", trait.names="neur", N=353486, info.filter = 0.9, maf.filter = 0.01, log.name="neur_munge.txt")
+
+LDSC:
+In /pl/active/KellerLab/katerina/COLLABORATIONS/claire and linked in /pl/active/KellerLab/katerina/SCRIPTS/gSEM/ldsc/
+LDSC_PainPsychNEURqt.sh
+LDSC_PainPsych_neurQT.R
+
+blargh
