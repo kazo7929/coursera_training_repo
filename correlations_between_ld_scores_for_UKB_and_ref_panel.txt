@@ -1,0 +1,47 @@
+In: /pl/active/KellerLab/katerina/RESULTS/LD
+
+zcat s_asn_ukb_22.ld.gz | sed 's/ \+/\t/g' | sed 's/^\t//' | sort -k2,2 -k5,5 > s_asn_ukb_22.sorted
+
+In: /pl/active/IBG/1KGv3/s_asn/s_asn_w_ld_chr
+zcat s_asn.ld.chr22.ld.gz | sed 's/ \+/\t/g' | sed 's/^\t//' | sort -k2,2 -k5,5 > s_asn.ld.chr22.ld_sorted
+
+
+
+
+
+[kazo7929@bhpc-c5-u7-18 s_asn_w_ld_chr]$ wc -l s_asn.ld.chr22.ld_sorted
+1580174989 s_asn.ld.chr22.ld_sorted
+
+
+[kazo7929@login13 s_asn_w_ld_chr]$ zcat s_asn.ld.chr22.ld.gz | wc -l
+
+
+
+
+3427737589
+
+/pl/active/IBG/1KGv3 has
+bed/bim
+vcf
+bcf
+other stuff for each chrom, like:
+-r--r-----. 1 luev6784 ibggrp      437M 16 jun  2018 ALL.chr15.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
+-rw-r-----. 1 luev6784 ibggrp      202K 19 avr  2016 ALL.chrMT.phase3_callmom-v0_4.20130502.genotypes.vcf.gz
+-rw-r-----. 1 luev6784 ibggrp       119 19 avr  2016 ALL.chrMT.phase3_callmom-v0_4.20130502.genotypes.vcf.gz.tbi
+-rw-rw----. 1 luev6784 ibggrp      1,8G 17 aoû  2015 ALL.chrX.phase3_shapeit2_mvncall_integrated_v1b.20130502.genotypes.vcf.gz
+-rw-rw----. 1 luev6784 ibggrp      145K 17 aoû  2015 ALL.chrX.phase3_shapeit2_mvncall_integrated_v1b.20130502.genotypes.vcf.gz.tbi
+
+-rwxr-x--x. 1 kazo7929 mmkellergrp 461M 26 sep  2014 1000GP_Phase3_chr10.hap.gz
+-rwxr-x--x. 1 kazo7929 mmkellergrp  80M 12 oct  2014 1000GP_Phase3_chr8.legend.gz
+-rwxr-x--x. 1 kazo7929 mmkellergrp 6,7M 25 sep  2014 genetic_map_chr7_combined_b37.txt
+
+/pl/active/IBG/1KGv3/LD_reference has
+Plink output ld files:
+-rw-r-----. 1 kazo7929 ibggrp 594G 12 avr 18:35 all.ld.chr15.ld.gz
+
+/pl/active/IBG/1KGv3/s_asn has
+LDSC calculated ld scores
+bed/bim/fam with centimorgan
+
+
+
